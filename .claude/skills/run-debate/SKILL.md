@@ -10,6 +10,17 @@ allowed-tools: Bash(python3 *), Bash(mkdir *), Bash(chmod *), Read, Write, Glob
 
 Run a structured 5-agent debate on: **$ARGUMENTS**
 
+## Search Depth
+
+Before starting, determine the search depth. Look at the user's message for cues:
+- If they say "quick", "fast", or "brief" → **quick** (1 search round)
+- If no special instruction → **standard** (2 search rounds) — this is the default
+- If they say "deep", "thorough", or "detailed" → **deep** (4 search rounds)
+- If they say "exhaustive", "a lot", "maximum", or "everything" → **exhaustive** (6 search rounds)
+
+Set the variable `SEARCH_ROUNDS` accordingly (1, 2, 4, or 6).
+Tell the user which depth you're using and how many search rounds that means.
+
 ## Setup Check
 
 Before running, verify dependencies are installed:
@@ -50,7 +61,7 @@ Write a prompt to `{output_dir}/prompt_research_gemini.txt` that asks for compre
 - Quantitative data points with sources
 
 ```bash
-python3 .claude/skills/run-debate/call_model.py gemini gemini-3-pro-preview {output_dir}/prompt_research_gemini.txt {output_dir}/01_research_gemini.md --search-grounding
+python3 .claude/skills/run-debate/call_model.py gemini gemini-3-pro-preview {output_dir}/prompt_research_gemini.txt {output_dir}/01_research_gemini.md --search-grounding --search-rounds {SEARCH_ROUNDS}
 ```
 
 **Agent 2 — GPT Research:**
@@ -112,6 +123,7 @@ Then write `{output_dir}/SYNTHESIS.md` with this structure:
 
 **Date:** [today's date]
 **Models used:** Gemini 3 Pro Preview (research + FOR), GPT-5.2 Pro (research + AGAINST), Claude (synthesis)
+**Search depth:** [quick/standard/deep/exhaustive] ([N] search rounds)
 
 ## Executive Summary
 [2-3 paragraph calibrated summary]
@@ -154,8 +166,9 @@ Then write `{output_dir}/SYNTHESIS.md` with this structure:
 
 ### Search & Web Sources
 [Summarize the search grounding data from the cost JSON files]
+- **Search rounds:** [N]
 - **Total Google searches performed:** [sum of num_searches from all cost JSONs]
-- **Total webpages cited:** [sum of num_webpages from all cost JSONs]
+- **Total unique webpages cited:** [sum of num_webpages from all cost JSONs]
 - **Search queries used:** [list all search_queries from the cost JSONs]
 - **Web sources cited:** [list all web_sources titles/domains from the cost JSONs]
 ```
@@ -165,6 +178,7 @@ Then write `{output_dir}/SYNTHESIS.md` with this structure:
 After writing SYNTHESIS.md, print a summary to the user:
 - The output directory path
 - The 5 files created
+- The search depth used and number of search rounds
 - The overall confidence level from the synthesis
 - Top 3 actionable recommendations
 - **Total token cost across all 4 API calls**

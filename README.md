@@ -52,8 +52,31 @@ In Claude Code (from this repo):
 
 Or call the model wrapper directly:
 ```bash
+# Single search round (default)
 python3 .claude/skills/run-debate/call_model.py gemini gemini-3-pro-preview prompt.txt output.md --search-grounding
+
+# Deep research: 5 rounds of search, each finding NEW info
+python3 .claude/skills/run-debate/call_model.py gemini gemini-3-pro-preview prompt.txt output.md --search-grounding --search-rounds 5
+
 python3 .claude/skills/run-debate/call_model.py openai gpt-5.2-pro prompt.txt output.md
+```
+
+## Search Depth
+
+Control how extensively the Gemini research agent searches the web. The skill auto-detects from your message, or you can specify explicitly:
+
+| Depth | Search Rounds | Use When |
+|-------|--------------|----------|
+| **quick** | 1 | Fast answer, known topic |
+| **standard** | 2 | Default for most debates |
+| **deep** | 4 | Complex topics, need thorough coverage |
+| **exhaustive** | 6 | Maximum coverage, want every angle |
+
+Each round makes a fresh Gemini API call with `--search-grounding`, explicitly instructed to find **new and different** information not covered in previous rounds. Deduplicates web sources across rounds.
+
+```
+# The skill detects depth from your message:
+/run-debate [exhaustive] What will happen to the US housing market in 2026?
 ```
 
 ## Output Structure
