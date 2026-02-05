@@ -7,7 +7,7 @@ A structured 5-agent debate system that uses **Gemini**, **GPT**, and **Claude**
 ```
 Phase 1: Research (parallel)         Phase 2: Debate (parallel)        Phase 3: Synthesis
 ┌─────────────────────┐              ┌──────────────────────┐          ┌──────────────────┐
-│ Gemini 2.5 Pro      │              │ Gemini 2.5 Pro       │          │ Claude Opus 4.5  │
+│ Gemini 3 Pro      │              │ Gemini 3 Pro       │          │ Claude Opus 4.5  │
 │ + Google Search      │──┐       ┌──│ FOR (85-95%)         │──┐       │                  │
 │ (market data, stats) │  │       │  │ (high conviction)    │  │       │ Calibrated       │
 └─────────────────────┘  │       │  └──────────────────────┘  ├──────▶│ Synthesis        │
@@ -23,7 +23,7 @@ Phase 1: Research (parallel)         Phase 2: Debate (parallel)        Phase 3: 
 
 ## Features
 
-- **Multi-model**: Gemini 2.5 Pro (with Google Search grounding) + GPT-5.2 Pro + Claude
+- **Multi-model**: Gemini 3 Pro (with Google Search grounding) + GPT-5.2 Pro + Claude
 - **Token cost tracking**: Every API call logs input/output/thinking tokens and calculates USD cost
 - **Parallel execution**: Research and debate phases run agents simultaneously
 - **Claude Code skill**: Invoke with `/run-debate <your question>` in Claude Code
@@ -52,7 +52,7 @@ In Claude Code (from this repo):
 
 Or call the model wrapper directly:
 ```bash
-python3 .claude/skills/run-debate/call_model.py gemini gemini-2.5-pro prompt.txt output.md --search-grounding
+python3 .claude/skills/run-debate/call_model.py gemini gemini-3-pro-preview prompt.txt output.md --search-grounding
 python3 .claude/skills/run-debate/call_model.py openai gpt-5.2-pro prompt.txt output.md
 ```
 
@@ -100,6 +100,7 @@ The synthesis includes a total cost table across all 4 API calls.
 
 | Provider | Model | Input $/1M | Output $/1M |
 |----------|-------|-----------|-------------|
+| Gemini | gemini-3-pro-preview | $2.00 | $12.00 |
 | Gemini | gemini-2.5-pro | $1.25 | $10.00 |
 | Gemini | gemini-2.5-flash | $0.15 | $0.60 |
 | OpenAI | gpt-5.2-pro | $1.75 | $14.00 |

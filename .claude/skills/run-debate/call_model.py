@@ -20,6 +20,7 @@ from typing import Optional
 # Pricing per 1M tokens (USD) — update as models change
 PRICING = {
     # Gemini (https://ai.google.dev/gemini-api/docs/pricing)
+    "gemini-3-pro-preview": {"input": 2.00, "output": 12.00, "thinking": 3.50},
     "gemini-2.5-pro":   {"input": 1.25, "output": 10.00, "thinking": 3.50},
     "gemini-2.5-flash": {"input": 0.15, "output": 0.60,  "thinking": 0.70},
     "gemini-2.0-flash": {"input": 0.10, "output": 0.40,  "thinking": 0.00},

@@ -50,7 +50,7 @@ Write a prompt to `{output_dir}/prompt_research_gemini.txt` that asks for compre
 - Quantitative data points with sources
 
 ```bash
-python3 .claude/skills/run-debate/call_model.py gemini gemini-2.5-pro {output_dir}/prompt_research_gemini.txt {output_dir}/01_research_gemini.md --search-grounding
+python3 .claude/skills/run-debate/call_model.py gemini gemini-3-pro-preview {output_dir}/prompt_research_gemini.txt {output_dir}/01_research_gemini.md --search-grounding
 ```
 
 **Agent 2 — GPT Research:**
@@ -76,7 +76,7 @@ Write a prompt to `{output_dir}/prompt_for.txt` that:
 - Requires: thesis statement, 5+ supporting arguments with evidence, quantitative projections, timeline, acknowledgment of 2-3 weaknesses
 
 ```bash
-python3 .claude/skills/run-debate/call_model.py gemini gemini-2.5-pro {output_dir}/prompt_for.txt {output_dir}/03_debate_for.md
+python3 .claude/skills/run-debate/call_model.py gemini gemini-3-pro-preview {output_dir}/prompt_for.txt {output_dir}/03_debate_for.md
 ```
 
 **Agent 4 — AGAINST (GPT, low confidence):**
@@ -111,7 +111,7 @@ Then write `{output_dir}/SYNTHESIS.md` with this structure:
 # Synthesis: [Topic]
 
 **Date:** [today's date]
-**Models used:** Gemini 2.5 Pro (research + FOR), GPT-5.2 Pro (research + AGAINST), Claude (synthesis)
+**Models used:** Gemini 3 Pro Preview (research + FOR), GPT-5.2 Pro (research + AGAINST), Claude (synthesis)
 
 ## Executive Summary
 [2-3 paragraph calibrated summary]
