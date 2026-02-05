@@ -151,6 +151,13 @@ Then write `{output_dir}/SYNTHESIS.md` with this structure:
 | **Total** | | | | | **$X.XXXX** | |
 
 *Note: Claude synthesis cost is not tracked here as it runs within the Claude Code session.*
+
+### Search & Web Sources
+[Summarize the search grounding data from the cost JSON files]
+- **Total Google searches performed:** [sum of num_searches from all cost JSONs]
+- **Total webpages cited:** [sum of num_webpages from all cost JSONs]
+- **Search queries used:** [list all search_queries from the cost JSONs]
+- **Web sources cited:** [list all web_sources titles/domains from the cost JSONs]
 ```
 
 ## Final Output
@@ -161,3 +168,4 @@ After writing SYNTHESIS.md, print a summary to the user:
 - The overall confidence level from the synthesis
 - Top 3 actionable recommendations
 - **Total token cost across all 4 API calls**
+- **Total Google searches performed and webpages cited** (from search grounding metadata)

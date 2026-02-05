@@ -76,6 +76,22 @@ def call_gemini(model: str, prompt: str, system_prompt: Optional[str] = None, se
     thinking_tokens = getattr(u, "thoughts_token_count", 0) or 0
     total_tokens = getattr(u, "total_token_count", 0) or 0
 
+    # Extract search grounding metadata
+    search_queries = []
+    web_sources = []
+    if search_grounding and response.candidates:
+        gm = response.candidates[0].grounding_metadata
+        if gm:
+            if hasattr(gm, "web_search_queries") and gm.web_search_queries:
+                search_queries = list(gm.web_search_queries)
+            if hasattr(gm, "grounding_chunks") and gm.grounding_chunks:
+                for chunk in gm.grounding_chunks:
+                    if hasattr(chunk, "web") and chunk.web:
+                        web_sources.append({
+                            "title": getattr(chunk.web, "title", ""),
+                            "uri": getattr(chunk.web, "uri", ""),
+                        })
+
     usage = {
         "provider": "gemini",
         "model": model,
@@ -85,6 +101,10 @@ def call_gemini(model: str, prompt: str, system_prompt: Optional[str] = None, se
         "total_tokens": total_tokens,
         "cost_usd": calc_cost(model, input_tokens, output_tokens, thinking_tokens),
         "latency_seconds": elapsed,
+        "search_queries": search_queries,
+        "web_sources": web_sources,
+        "num_searches": len(search_queries),
+        "num_webpages": len(web_sources),
     }
 
     return response.text or "", usage
@@ -133,6 +153,10 @@ def call_openai(model: str, prompt: str, system_prompt: Optional[str] = None) ->
         "total_tokens": total_tokens,
         "cost_usd": calc_cost(model, input_tokens, output_tokens, reasoning_tokens),
         "latency_seconds": elapsed,
+        "search_queries": [],
+        "web_sources": [],
+        "num_searches": 0,
+        "num_webpages": 0,
     }
 
     return response.choices[0].message.content or "", usage
@@ -182,6 +206,8 @@ def main():
     print(f"    Tokens:   {usage['input_tokens']:,} in / {usage['output_tokens']:,} out / {usage['thinking_tokens']:,} thinking")
     print(f"    Cost:     {cost_str}")
     print(f"    Latency:  {usage['latency_seconds']}s")
+    if usage.get("num_searches", 0) > 0 or usage.get("num_webpages", 0) > 0:
+        print(f"    Searches: {usage['num_searches']} queries / {usage['num_webpages']} webpages cited")
     print(f"    Report:   {cost_file}")
 
 
